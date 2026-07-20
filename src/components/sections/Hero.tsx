@@ -72,6 +72,7 @@ export default function Hero() {
           loop
           muted
           playsInline
+          poster="https://res.cloudinary.com/dhxwwwqt8/video/upload/so_0/v1784542992/new-lux_odchdt.jpg"
           style={{
             position: "absolute",
             width: "100%",
@@ -81,7 +82,14 @@ export default function Hero() {
             left: 0,
           }}
         >
-          <source src="/lux-vid.mp4" type="video/mp4" />
+          <source
+            src="https://res.cloudinary.com/dhxwwwqt8/video/upload/f_webm,q_auto/v1784542992/new-lux_odchdt.webm"
+            type="video/webm"
+          />
+          <source
+            src="https://res.cloudinary.com/dhxwwwqt8/video/upload/q_auto/v1784542992/new-lux_odchdt.mp4"
+            type="video/mp4"
+          />
         </video>
         <div
           style={{
