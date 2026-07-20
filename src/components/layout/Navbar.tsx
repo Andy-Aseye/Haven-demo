@@ -163,26 +163,6 @@ export default function Navbar() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flex: 1, justifyContent: "flex-end" }}>
-          <Link
-            href="/tour"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "40px",
-              background: "rgba(50, 60, 45, 0.95)",
-              borderRadius: "2rem",
-              padding: "0 1.25rem",
-              color: "#fff",
-              fontFamily: "var(--font-body)",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              textDecoration: "none",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            360° Tour
-          </Link>
           
           {/* Menu button */}
           <button
