@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const navSections = [
   {
@@ -71,6 +72,7 @@ const TimeDisplay = () => {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60);
@@ -116,8 +118,9 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Sense of Place Widget (Center) */}
+        {/* Sense of Place Widget (Center) — hidden on mobile via CSS */}
         <div
+          className="navbar-widget"
           style={{
             display: "flex",
             alignItems: "center",
@@ -218,12 +221,12 @@ export default function Navbar() {
           transition: "opacity 400ms ease",
           display: "flex",
           flexDirection: "column",
-          padding: "2.5rem 4rem",
+          padding: isMobile ? "1.5rem 1.25rem" : "2.5rem 4rem",
           color: "#E8EAE6",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4rem" }}>
-          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "3rem", fontWeight: 300, maxWidth: "500px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: isMobile ? "2rem" : "4rem" }}>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: isMobile ? "1.75rem" : "3rem", fontWeight: 300, maxWidth: "500px" }}>
             Our retreats, made to last
           </h2>
           <button
@@ -262,25 +265,25 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div style={{ display: "flex", gap: "6rem", flex: 1 }}>
+        <div style={{ display: "flex", gap: isMobile ? "2rem" : "6rem", flex: 1, flexDirection: isMobile ? "column" : "row", overflowY: isMobile ? "auto" : "visible" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <Link href="#about" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: "2rem", fontFamily: "var(--font-display)" }}>About us</Link>
-            <Link href="#news" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: "2rem", fontFamily: "var(--font-display)" }}>News</Link>
-            <Link href="#faq" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: "2rem", fontFamily: "var(--font-display)" }}>FAQ</Link>
-            <Link href="#contact" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: "2rem", fontFamily: "var(--font-display)" }}>Contact</Link>
+            <Link href="#about" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: isMobile ? "1.5rem" : "2rem", fontFamily: "var(--font-display)" }}>About us</Link>
+            <Link href="#news" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: isMobile ? "1.5rem" : "2rem", fontFamily: "var(--font-display)" }}>News</Link>
+            <Link href="#faq" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: isMobile ? "1.5rem" : "2rem", fontFamily: "var(--font-display)" }}>FAQ</Link>
+            <Link href="#contact" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: isMobile ? "1.5rem" : "2rem", fontFamily: "var(--font-display)" }}>Contact</Link>
 
-            <Link href="#what-is-haven" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: "1.25rem", fontFamily: "var(--font-body)", marginTop: "auto", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Link href="#what-is-haven" onClick={() => setMenuOpen(false)} style={{ color: "#fff", textDecoration: "none", fontSize: "1rem", fontFamily: "var(--font-body)", marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
               What is Haven? <span style={{ fontSize: "0.8em" }}>↗</span>
             </Link>
           </div>
 
-          <div style={{ display: "flex", gap: "4rem" }}>
+          <div style={{ display: "flex", gap: isMobile ? "2rem" : "4rem", flexWrap: isMobile ? "wrap" : "nowrap" }}>
             {navSections.map((section, idx) => (
               <div key={idx}>
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", marginBottom: "1.5rem", fontWeight: 300, borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: "1rem" }}>
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: isMobile ? "0.875rem" : "1.5rem", marginBottom: "1rem", fontWeight: 300, borderBottom: "1px solid rgba(255,255,255,0.2)", paddingBottom: "0.75rem" }}>
                   {section.title}
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   {section.links.map((link) => (
                     <Link
                       key={link.label}
@@ -302,9 +305,12 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div style={{ flex: 1, position: "relative", borderRadius: "16rem 16rem 0 0", overflow: "hidden", marginLeft: "4rem" }}>
-            <img src="/hero-bg.jpg" alt="Menu backdrop" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
-          </div>
+          {/* Backdrop image — hidden on mobile to save space */}
+          {!isMobile && (
+            <div style={{ flex: 1, position: "relative", borderRadius: "16rem 16rem 0 0", overflow: "hidden", marginLeft: "4rem" }}>
+              <img src="/hero-bg.jpg" alt="Menu backdrop" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
+            </div>
+          )}
         </div>
       </div>
     </>
