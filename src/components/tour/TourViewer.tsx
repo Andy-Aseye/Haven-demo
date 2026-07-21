@@ -6,7 +6,9 @@ import { OrbitControls } from "@react-three/drei";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import * as THREE from "three";
 import Hotspot from "./Hotspot";
+import NavArrow from "./NavArrow";
 import type { ResidenceHotspot } from "@/data/residences";
+import type { NavHotspot } from "@/data/tourScenes";
 
 // ─── HDR Panorama Sphere ────────────────────────────────────
 function PanoramaSphere({ url }: { url: string }) {
@@ -60,17 +62,21 @@ function SceneContent({
   autoRotate,
   activeHotspot,
   onHotspotClick,
+  onNavigate,
   controlsRef,
   onLoaded,
   hotspots,
+  navHotspots,
 }: {
   panoramaUrl: string;
   autoRotate: boolean;
   activeHotspot: string | null;
   onHotspotClick: (id: string) => void;
+  onNavigate: (targetSceneId: string) => void;
   controlsRef: React.RefObject<React.ComponentRef<typeof OrbitControls> | null>;
   onLoaded: () => void;
   hotspots: ResidenceHotspot[];
+  navHotspots: NavHotspot[];
 }) {
   useEffect(() => {
     const timer = setTimeout(onLoaded, 300);
@@ -88,6 +94,9 @@ function SceneContent({
           isActive={activeHotspot === hotspot.id}
           onClick={onHotspotClick}
         />
+      ))}
+      {navHotspots.map((nav) => (
+        <NavArrow key={nav.id} data={nav} onClick={onNavigate} />
       ))}
     </>
   );
@@ -146,17 +155,24 @@ const TourViewer = forwardRef<
   {
     panoramaUrl: string;
     hotspots?: ResidenceHotspot[];
+    navHotspots?: NavHotspot[];
     autoRotate: boolean;
     activeHotspot: string | null;
     onHotspotClick: (id: string) => void;
+    onNavigate?: (targetSceneId: string) => void;
     onLoaded?: () => void;
   }
 >(function TourViewer(
-  { panoramaUrl, hotspots = [], autoRotate, activeHotspot, onHotspotClick, onLoaded },
+  { panoramaUrl, hotspots = [], navHotspots = [], autoRotate, activeHotspot, onHotspotClick, onNavigate, onLoaded },
   ref
 ) {
   const controlsRef = useRef<React.ComponentRef<typeof OrbitControls> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Reset loading state whenever the panorama changes
+  useEffect(() => {
+    setIsLoading(true);
+  }, [panoramaUrl]);
 
   const handleLoaded = useCallback(() => {
     setIsLoading(false);
@@ -196,13 +212,16 @@ const TourViewer = forwardRef<
       >
         <Suspense fallback={null}>
           <SceneContent
+            key={panoramaUrl}
             panoramaUrl={panoramaUrl}
             autoRotate={autoRotate}
             activeHotspot={activeHotspot}
             onHotspotClick={onHotspotClick}
+            onNavigate={onNavigate ?? (() => {})}
             controlsRef={controlsRef}
             onLoaded={handleLoaded}
             hotspots={hotspots}
+            navHotspots={navHotspots}
           />
         </Suspense>
       </Canvas>

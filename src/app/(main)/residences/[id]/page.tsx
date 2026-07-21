@@ -22,6 +22,9 @@ export default function ResidencePage() {
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [tourResidenceId, setTourResidenceId] = useState(residence?.id ?? "");
+  const [fadeOpacity, setFadeOpacity] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const viewerRef = useRef<TourViewerHandle>(null);
   const tourContainerRef = useRef<HTMLDivElement>(null);
@@ -31,14 +34,31 @@ export default function ResidencePage() {
     setTourOpen(true);
     setAutoRotate(true);
     setActiveHotspot(null);
+    setTourResidenceId(residence?.id ?? "");
     document.body.style.overflow = "hidden";
-  }, []);
+  }, [residence?.id]);
 
   const closeTour = useCallback(() => {
     setTourOpen(false);
     setActiveHotspot(null);
+    setTourResidenceId(residence?.id ?? "");
     document.body.style.overflow = "";
-  }, []);
+  }, [residence?.id]);
+
+  const handleNavigate = useCallback((targetId: string) => {
+    if (isTransitioning || targetId === tourResidenceId) return;
+    setIsTransitioning(true);
+    setFadeOpacity(1);
+    setActiveHotspot(null);
+    setAutoRotate(true);
+    setTimeout(() => {
+      setTourResidenceId(targetId);
+      setTimeout(() => {
+        setFadeOpacity(0);
+        setTimeout(() => setIsTransitioning(false), 400);
+      }, 200);
+    }, 400);
+  }, [isTransitioning, tourResidenceId]);
 
   const handleHotspotClick = useCallback((id: string) => {
     setActiveHotspot((prev) => (prev === id ? null : id));
@@ -80,6 +100,8 @@ export default function ResidencePage() {
       </div>
     );
   }
+
+  const tourResidence = residences.find((r) => r.id === tourResidenceId) ?? residence;
 
   return (
     <>
@@ -420,8 +442,10 @@ export default function ResidencePage() {
         >
           <TourViewer
             ref={viewerRef}
-            panoramaUrl={residence.panoramaUrl}
-            hotspots={residence.hotspots}
+            panoramaUrl={tourResidence.panoramaUrl}
+            hotspots={tourResidence.hotspots}
+            navHotspots={tourResidence.navHotspots}
+            onNavigate={handleNavigate}
             autoRotate={autoRotate}
             activeHotspot={activeHotspot}
             onHotspotClick={handleHotspotClick}
@@ -436,8 +460,21 @@ export default function ResidencePage() {
             onZoomOut={() => viewerRef.current?.zoomOut()}
             isFullscreen={isFullscreen}
             onToggleFullscreen={handleToggleFullscreen}
-            hotspots={residence.hotspots}
-            sceneName={residence.name}
+            hotspots={tourResidence.hotspots}
+            sceneName={tourResidence.name}
+          />
+
+          {/* Suite transition fade overlay */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#000",
+              opacity: fadeOpacity,
+              transition: "opacity 0.4s ease",
+              pointerEvents: isTransitioning ? "all" : "none",
+              zIndex: 10000,
+            }}
           />
 
           {/* Close button */}
