@@ -16,7 +16,7 @@ const tourScenes: TourScene[] = [
   {
     id: "lobby",
     label: "Grand Lobby",
-    panoramaUrl: "/newman_lobby_2k.jpg",
+    panoramaUrl: "/newman_lobby_4k.webp",
     navHotspots: [
       { id: "lobby-to-lounge", targetSceneId: "lounge", label: "Private Lounge", position: [-9, -3, 0] },
       { id: "lobby-to-glasshouse", targetSceneId: "glasshouse", label: "Glasshouse Suite", position: [9, -3, 0] },
@@ -25,7 +25,7 @@ const tourScenes: TourScene[] = [
   {
     id: "lounge",
     label: "Private Lounge",
-    panoramaUrl: "/lythwood_lounge_2k.jpg",
+    panoramaUrl: "/lythwood_lounge_4k.webp",
     navHotspots: [
       { id: "lounge-to-lobby", targetSceneId: "lobby", label: "Grand Lobby", position: [9, -3, 0] },
       { id: "lounge-to-studio", targetSceneId: "studio", label: "The Studio", position: [0, -3, -9] },
@@ -34,7 +34,7 @@ const tourScenes: TourScene[] = [
   {
     id: "glasshouse",
     label: "Glasshouse Suite",
-    panoramaUrl: "/glasshouse_interior_2k.jpg",
+    panoramaUrl: "/glasshouse_interior_4k.webp",
     navHotspots: [
       { id: "glass-to-lobby", targetSceneId: "lobby", label: "Grand Lobby", position: [-9, -3, 0] },
       { id: "glass-to-studio", targetSceneId: "studio", label: "The Studio", position: [0, -3, -9] },
@@ -43,7 +43,7 @@ const tourScenes: TourScene[] = [
   {
     id: "studio",
     label: "The Studio",
-    panoramaUrl: "/brown_photostudio_02_2k.jpg",
+    panoramaUrl: "/brown_photostudio_02_4k.webp",
     navHotspots: [
       { id: "studio-to-glasshouse", targetSceneId: "glasshouse", label: "Glasshouse Suite", position: [0, -3, 9] },
       { id: "studio-to-lounge", targetSceneId: "lounge", label: "Private Lounge", position: [9, -3, 0] },
