@@ -8,9 +8,10 @@ import residences from "@/data/residences";
 import UIOverlay from "@/components/tour/UIOverlay";
 import type { TourViewerHandle } from "@/components/tour/TourViewer";
 
-const TourViewer = dynamic(() => import("@/components/tour/TourViewer"), {
-  ssr: false,
-});
+const TourViewer = dynamic(
+  () => import(/* webpackPrefetch: true */ "@/components/tour/TourViewer"),
+  { ssr: false }
+);
 
 export default function ResidencePage() {
   const params = useParams();
@@ -83,6 +84,13 @@ export default function ResidencePage() {
     document.addEventListener("fullscreenchange", handleChange);
     return () => document.removeEventListener("fullscreenchange", handleChange);
   }, []);
+
+  // Prefetch panorama in the background so the browser cache is warm before user clicks Start Tour
+  useEffect(() => {
+    if (residence?.panoramaUrl) {
+      fetch(residence.panoramaUrl).catch(() => {});
+    }
+  }, [residence?.panoramaUrl]);
 
   // Close on Escape
   useEffect(() => {

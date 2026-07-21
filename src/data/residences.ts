@@ -34,7 +34,7 @@ const residences: Residence[] = [
     pricePerNight: 850,
     size: "120 m²",
     guests: 2,
-    panoramaUrl: "/glasshouse_interior_4k.hdr",
+    panoramaUrl: "/glasshouse_interior_2k.jpg",
     image:
       "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=90",
     amenities: [
@@ -126,7 +126,7 @@ const residences: Residence[] = [
     pricePerNight: 1200,
     size: "180 m²",
     guests: 4,
-    panoramaUrl: "/lythwood_lounge_4k.hdr",
+    panoramaUrl: "/lythwood_lounge_2k.jpg",
     image:
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600&q=90",
     amenities: [
@@ -157,7 +157,7 @@ const residences: Residence[] = [
     pricePerNight: 2400,
     size: "320 m²",
     guests: 6,
-    panoramaUrl: "/newman_lobby_4k.hdr",
+    panoramaUrl: "/newman_lobby_2k.jpg",
     image:
       "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1600&q=90",
     amenities: [
@@ -188,7 +188,7 @@ const residences: Residence[] = [
     pricePerNight: 650,
     size: "90 m²",
     guests: 2,
-    panoramaUrl: "/brown_photostudio_02_4k.hdr",
+    panoramaUrl: "/brown_photostudio_02_2k.jpg",
     image:
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&q=90",
     amenities: [
