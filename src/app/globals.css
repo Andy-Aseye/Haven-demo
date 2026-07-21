@@ -177,3 +177,22 @@ a:focus-visible {
 .locations-cta:hover {
   border-color: var(--color-text-dark) !important;
 }
+
+/* ── Global mobile overrides ─────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hide the navbar center widget on small screens */
+  .navbar-widget {
+    display: none !important;
+  }
+
+  /* Features section cards: allow horizontal scroll on mobile */
+  .features-carousel {
+    padding-bottom: 1rem;
+  }
+
+  /* Footer columns stack on mobile */
+  .footer-columns {
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+}

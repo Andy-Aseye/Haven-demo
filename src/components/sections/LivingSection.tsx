@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -23,6 +24,7 @@ type Tab = "Rooms" | "Amenities" | "Sustainability";
 
 export default function LivingSection() {
   const [activeTab, setActiveTab] = useState<Tab>("Rooms");
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -90,17 +92,19 @@ export default function LivingSection() {
   };
 
   return (
-    <section ref={sectionRef} style={{ backgroundColor: "#fff", padding: "6rem 2.5rem" }}>
+    <section ref={sectionRef} style={{ backgroundColor: "#fff", padding: isMobile ? "3rem 1.25rem" : "6rem 2.5rem" }}>
       {/* Top Header */}
       <div
         ref={headerRef}
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
           alignItems: "flex-start",
           width: "100%",
           margin: "0 auto",
-          marginBottom: "3rem",
+          marginBottom: isMobile ? "1.5rem" : "3rem",
+          gap: isMobile ? "1.25rem" : 0,
         }}
       >
         <h2
@@ -151,7 +155,8 @@ export default function LivingSection() {
           position: "relative",
           width: "100%",
           margin: "0 auto",
-          height: "85vh",
+          height: isMobile ? "auto" : "85vh",
+          minHeight: isMobile ? "70vh" : undefined,
           borderRadius: "24px",
           overflow: "hidden",
           backgroundColor: "#d9d9d9", // fallback
@@ -240,11 +245,11 @@ export default function LivingSection() {
               alignItems: "center",
             }}
           >
-            {/* Intro Text over Rooms */}
+            {/* Intro Text over Rooms — hidden on mobile to give cards full width */}
             <div
               style={{
                 flex: "0 0 35%",
-                display: "flex",
+                display: isMobile ? "none" : "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 color: "#fff",
@@ -281,7 +286,7 @@ export default function LivingSection() {
                   <Link
                   key={r.id}
                   href={`/residences/${r.id}`}
-                  style={{ textDecoration: "none", flexShrink: 0, width: "26vw", minWidth: "300px", display: "block" }}
+                  style={{ textDecoration: "none", flexShrink: 0, width: isMobile ? "80vw" : "26vw", minWidth: isMobile ? "260px" : "300px", display: "block" }}
                 >
                   <div
                     style={{
@@ -301,7 +306,7 @@ export default function LivingSection() {
                       (e.currentTarget as HTMLDivElement).style.boxShadow = "0 10px 30px rgba(0,0,0,0.15)";
                     }}
                   >
-                    <div style={{ position: "relative", height: "260px", width: "100%" }}>
+                    <div style={{ position: "relative", height: isMobile ? "200px" : "260px", width: "100%" }}>
                       <Image
                         src={r.image}
                         alt={r.name}
@@ -365,7 +370,7 @@ export default function LivingSection() {
           </div>
           
           {/* Arrow Buttons Overlay */}
-          <div style={{ position: "absolute", bottom: "2rem", left: "35%", display: "flex", gap: "1rem" }}>
+          <div style={{ position: "absolute", bottom: "2rem", left: isMobile ? "1rem" : "35%", display: "flex", gap: "1rem" }}>
             <button 
               onClick={() => scroll("left")}
               style={{ width: "40px", height: "40px", borderRadius: "50%", background: "transparent", border: "1px solid rgba(255,255,255,0.5)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s" }}
@@ -397,15 +402,17 @@ export default function LivingSection() {
             opacity: activeTab === "Amenities" ? 1 : 0,
             transition: "opacity 0.4s ease",
             display: "flex",
-            padding: "2rem",
-            alignItems: "center",
+            flexDirection: isMobile ? "column" : "row",
+            padding: isMobile ? "5rem 1.25rem 1.25rem" : "2rem",
+            alignItems: isMobile ? "flex-start" : "center",
+            gap: isMobile ? "1.5rem" : 0,
           }}
         >
-          <div style={{ flex: 1, paddingRight: "4rem" }}>
+          <div style={{ flex: 1, paddingRight: isMobile ? 0 : "4rem" }}>
             <h3
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "2.5rem",
+                fontSize: isMobile ? "1.5rem" : "2.5rem",
                 fontWeight: 400,
                 color: "#fff",
                 margin: 0,
@@ -420,7 +427,7 @@ export default function LivingSection() {
             style={{
               flex: 1,
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
               gap: "1rem",
             }}
           >
@@ -469,15 +476,17 @@ export default function LivingSection() {
             opacity: activeTab === "Sustainability" ? 1 : 0,
             transition: "opacity 0.4s ease",
             display: "flex",
-            padding: "2rem",
-            alignItems: "center",
+            flexDirection: isMobile ? "column" : "row",
+            padding: isMobile ? "5rem 1.25rem 1.25rem" : "2rem",
+            alignItems: isMobile ? "flex-start" : "center",
+            gap: isMobile ? "1.5rem" : 0,
           }}
         >
-          <div style={{ flex: 1, paddingRight: "4rem" }}>
+          <div style={{ flex: 1, paddingRight: isMobile ? 0 : "4rem" }}>
             <h3
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "2.5rem",
+                fontSize: isMobile ? "1.5rem" : "2.5rem",
                 fontWeight: 400,
                 color: "#fff",
                 margin: 0,
@@ -496,11 +505,11 @@ export default function LivingSection() {
               WebkitBackdropFilter: "blur(20px)",
               border: "1px solid rgba(255,255,255,0.2)",
               borderRadius: "1rem",
-              padding: "3rem",
+              padding: isMobile ? "1.25rem" : "3rem",
               color: "#fff",
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "3rem",
+              gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr",
+              gap: isMobile ? "1.5rem" : "3rem",
             }}
           >
             <div>
@@ -528,7 +537,7 @@ export default function LivingSection() {
         ref={culinaryRef}
         style={{
           maxWidth: "1000px",
-          margin: "6rem auto 0",
+          margin: isMobile ? "3rem auto 0" : "6rem auto 0",
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
@@ -544,7 +553,7 @@ export default function LivingSection() {
         <h3
           style={{
             fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.9rem, 3.0rem, 3.4rem)",
+            fontSize: isMobile ? "clamp(1.75rem, 6vw, 2.5rem)" : "clamp(2.9rem, 3.0rem, 3.4rem)",
             fontWeight: 400,
             color: "#544E45",
             marginBottom: "1.5rem",
@@ -555,7 +564,7 @@ export default function LivingSection() {
         <p
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "1.5rem",
+            fontSize: isMobile ? "1rem" : "1.5rem",
             color: "#544E45",
             lineHeight: 1.8,
             marginBottom: "2.5rem",

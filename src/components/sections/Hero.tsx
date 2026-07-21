@@ -3,8 +3,10 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Hero() {
+  const isMobile = useIsMobile();
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -110,7 +112,7 @@ export default function Hero() {
             alignItems: "flex-start",
             justifyContent: "center",
             textAlign: "left",
-            padding: "0 4rem",
+            padding: isMobile ? "0 1.25rem" : "0 4rem",
           }}
         >
           <h1
@@ -147,7 +149,7 @@ export default function Hero() {
           style={{
             position: "absolute",
             bottom: "2rem",
-            left: "4rem",
+            left: isMobile ? "1.25rem" : "4rem",
           }}
         >
           <p

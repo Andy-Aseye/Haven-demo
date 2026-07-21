@@ -3,8 +3,10 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function FeaturesSection() {
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
@@ -44,11 +46,11 @@ export default function FeaturesSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ backgroundColor: "#fff", color: "#111", padding: "8rem 2.5rem" }}>
+    <section ref={sectionRef} style={{ backgroundColor: "#fff", color: "#111", padding: isMobile ? "4rem 1.25rem" : "8rem 2.5rem" }}>
       <div style={{ width: "100%", margin: "0 auto", display: "flex", flexDirection: "column", gap: "6rem" }}>
-        
+
         {/* Main Text Area */}
-        <div ref={textRef} style={{ maxWidth: "80vw", margin: "0 auto", textAlign: "center" }}>
+        <div ref={textRef} style={{ maxWidth: isMobile ? "100%" : "80vw", margin: "0 auto", textAlign: "center" }}>
           <p
             style={{
               fontFamily: "var(--font-body)",
@@ -56,7 +58,7 @@ export default function FeaturesSection() {
               fontWeight: 500,
               lineHeight: 1.4,
               color: "#333",
-              margin: "0 0 3rem 0",
+              margin: isMobile ? "0 0 1.5rem 0" : "0 0 3rem 0",
             }}
           >
             <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontWeight: 600, color: "#111" }}>
@@ -94,9 +96,9 @@ export default function FeaturesSection() {
           {/* Card 1 */}
           <div
             style={{
-              minWidth: "350px",
-              flex: "1 0 350px",
-              height: "450px",
+              minWidth: isMobile ? "min(340px, 85vw)" : "350px",
+              flex: isMobile ? "0 0 85vw" : "1 0 350px",
+              height: isMobile ? "320px" : "450px",
               borderRadius: "2rem",
               position: "relative",
               overflow: "hidden",
@@ -114,12 +116,12 @@ export default function FeaturesSection() {
             <h3
               style={{
                 position: "absolute",
-                bottom: "2rem",
-                left: "2rem",
+                bottom: isMobile ? "1rem" : "2rem",
+                left: isMobile ? "1rem" : "2rem",
                 margin: 0,
                 color: "#fff",
                 fontFamily: "var(--font-display)",
-                fontSize: "2rem",
+                fontSize: isMobile ? "1.25rem" : "2rem",
                 fontWeight: 500,
               }}
             >
@@ -130,9 +132,9 @@ export default function FeaturesSection() {
           {/* Card 2 */}
           <div
             style={{
-              minWidth: "350px",
-              flex: "1 0 350px",
-              height: "450px",
+              minWidth: isMobile ? "min(340px, 85vw)" : "350px",
+              flex: isMobile ? "0 0 85vw" : "1 0 350px",
+              height: isMobile ? "320px" : "450px",
               borderRadius: "2rem",
               position: "relative",
               overflow: "hidden",
@@ -151,12 +153,12 @@ export default function FeaturesSection() {
             <h3
               style={{
                 position: "absolute",
-                bottom: "2rem",
-                left: "2rem",
+                bottom: isMobile ? "1rem" : "2rem",
+                left: isMobile ? "1rem" : "2rem",
                 margin: 0,
                 color: "#fff",
                 fontFamily: "var(--font-display)",
-                fontSize: "2rem",
+                fontSize: isMobile ? "1.25rem" : "2rem",
                 fontWeight: 500,
               }}
             >
@@ -167,9 +169,9 @@ export default function FeaturesSection() {
           {/* Card 3 */}
           <div
             style={{
-              minWidth: "350px",
-              flex: "1 0 350px",
-              height: "450px",
+              minWidth: isMobile ? "min(340px, 85vw)" : "350px",
+              flex: isMobile ? "0 0 85vw" : "1 0 350px",
+              height: isMobile ? "320px" : "450px",
               borderRadius: "2rem",
               position: "relative",
               overflow: "hidden",
@@ -187,12 +189,12 @@ export default function FeaturesSection() {
             <h3
               style={{
                 position: "absolute",
-                bottom: "2rem",
-                left: "2rem",
+                bottom: isMobile ? "1rem" : "2rem",
+                left: isMobile ? "1rem" : "2rem",
                 margin: 0,
                 color: "#fff",
                 fontFamily: "var(--font-display)",
-                fontSize: "2rem",
+                fontSize: isMobile ? "1.25rem" : "2rem",
                 fontWeight: 500,
               }}
             >

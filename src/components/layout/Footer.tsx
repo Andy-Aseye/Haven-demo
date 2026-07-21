@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Column = ({ title, items }: { title: string; items: string[] }) => (
   <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", minWidth: "120px" }}>
@@ -15,6 +16,7 @@ const Column = ({ title, items }: { title: string; items: string[] }) => (
 );
 
 export default function Footer() {
+  const isMobile = useIsMobile();
   const footerRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const middleSectionRef = useRef<HTMLDivElement>(null);
@@ -62,7 +64,7 @@ export default function Footer() {
       style={{
         backgroundColor: "#16312a", // Dark green from reference
         color: "#f0ecd3", // Cream text color
-        padding: "6rem 2.5rem 2rem",
+        padding: isMobile ? "3rem 1.25rem 2rem" : "6rem 2.5rem 2rem",
         fontFamily: "var(--font-body)",
       }}
     >
@@ -96,7 +98,7 @@ export default function Footer() {
           }}
         >
           {/* 4 columns */}
-          <div style={{ display: "flex", gap: "4rem", flexWrap: "wrap", flex: 1 }}>
+          <div style={{ display: "flex", gap: isMobile ? "2rem" : "4rem", flexWrap: "wrap", flex: 1 }}>
             <Column title="Navigate" items={["Experience", "Residences", "Amenities", "Location"]} />
             <Column title="Contact" items={["info@havenresort.com", "+233 30 000 0000", "Labadi Beach, Accra, Ghana"]} />
             <Column title="Socials" items={["Instagram", "Twitter", "LinkedIn"]} />
@@ -126,12 +128,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom Large Logo & Graphic */}
-        <div ref={logoSectionRef} style={{ display: "flex", alignItems: "center", gap: "2rem", marginBottom: "3rem" }}>
+        <div ref={logoSectionRef} style={{ display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: "2rem", marginBottom: "3rem" }}>
           <Image
             src="/logo-v2.png"
             alt="Haven Icon"
-            width={120}
-            height={120}
+            width={isMobile ? 72 : 120}
+            height={isMobile ? 72 : 120}
             style={{
               objectFit: "contain",
               filter: "brightness(0) invert(1) sepia(1) hue-rotate(10deg) saturate(2)", // Attempt to match cream color
@@ -141,7 +143,7 @@ export default function Footer() {
           <h1
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(5rem, 18vw, 15rem)",
+              fontSize: isMobile ? "clamp(2.5rem, 14vw, 8rem)" : "clamp(5rem, 18vw, 15rem)",
               fontWeight: 400,
               margin: 0,
               lineHeight: 0.8,
