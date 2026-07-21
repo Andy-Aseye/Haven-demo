@@ -1,5 +1,5 @@
 """
-Convert Radiance RGBE (.hdr) panoramas to 2K JPEG.
+Convert Radiance RGBE (.hdr) panoramas to 4K WebP.
 Pure Python + numpy + Pillow — no external C libraries needed.
 Applies ACES filmic tone mapping to match Three.js ACESFilmicToneMapping.
 """
@@ -8,8 +8,8 @@ import numpy as np
 from PIL import Image
 
 HDR_DIR = os.path.join(os.path.dirname(__file__), "..", "public")
-TARGET_SIZE = (2048, 1024)
-JPEG_QUALITY = 90
+TARGET_SIZE = (4096, 2048)
+WEBP_QUALITY = 85
 
 
 def read_hdr(path: str) -> np.ndarray:
@@ -82,12 +82,12 @@ FILES = [
     "brown_photostudio_02_4k.hdr",
 ]
 
-print(f"Target: {TARGET_SIZE[0]}×{TARGET_SIZE[1]} JPEG @ quality {JPEG_QUALITY}\n")
+print(f"Target: {TARGET_SIZE[0]}×{TARGET_SIZE[1]} WebP @ quality {WEBP_QUALITY}\n")
 
 for fn in FILES:
     src = os.path.join(HDR_DIR, fn)
     stem = fn.replace("_4k.hdr", "")
-    dst = os.path.join(HDR_DIR, f"{stem}_2k.jpg")
+    dst = os.path.join(HDR_DIR, f"{stem}_4k.webp")
 
     print(f"  {fn} …", end=" ", flush=True)
 
@@ -95,13 +95,13 @@ for fn in FILES:
     ldr = aces_filmic(hdr)                              # tone map
     srgb = np.power(np.clip(ldr, 0, 1), 1.0 / 2.2)    # gamma encode
 
-    img = Image.fromarray((srgb * 255).astype(np.uint8), "RGB")
+    img = Image.fromarray((srgb * 255).astype(np.uint8))
     img = img.resize(TARGET_SIZE, Image.LANCZOS)
-    img.save(dst, "JPEG", quality=JPEG_QUALITY, optimize=True)
+    img.save(dst, "WEBP", quality=WEBP_QUALITY)
 
     src_mb = os.path.getsize(src) / 1_000_000
     dst_kb = os.path.getsize(dst) / 1_000
     ratio = src_mb * 1000 / dst_kb
     print(f"{src_mb:.1f} MB  →  {dst_kb:.0f} KB  ({ratio:.0f}× smaller)  ✓")
 
-print("\nDone. Updating source files next…")
+print("\nDone.")
