@@ -1,9 +1,8 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback, useImperativeHandle, forwardRef, Suspense } from "react";
-import { Canvas, useThree, useLoader } from "@react-three/fiber";
+import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import * as THREE from "three";
 import Hotspot from "./Hotspot";
 import NavArrow from "./NavArrow";
@@ -12,14 +11,13 @@ import type { NavHotspot } from "@/data/tourScenes";
 
 // ─── HDR Panorama Sphere ────────────────────────────────────
 function PanoramaSphere({ url }: { url: string }) {
-  const texture = useLoader(RGBELoader, url);
-  const { gl } = useThree();
+  const texture = useLoader(THREE.TextureLoader, url);
 
   useEffect(() => {
     texture.mapping = THREE.EquirectangularReflectionMapping;
-    gl.toneMapping = THREE.ACESFilmicToneMapping;
-    gl.toneMappingExposure = 1.0;
-  }, [texture, gl]);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+  }, [texture]);
 
   return (
     <mesh scale={[-1, 1, 1]}>
@@ -103,7 +101,7 @@ function SceneContent({
 }
 
 // ─── Loading Screen ─────────────────────────────────────────
-function LoadingOverlay() {
+function LoadingOverlay({ progress }: { progress: number }) {
   return (
     <div
       style={{
@@ -118,6 +116,17 @@ function LoadingOverlay() {
         gap: "1.5rem",
       }}
     >
+      {/* Progress bar along the top */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "rgba(255,255,255,0.08)" }}>
+        <div
+          style={{
+            height: "100%",
+            width: `${progress}%`,
+            background: "rgba(255,255,255,0.75)",
+            transition: "width 0.3s ease",
+          }}
+        />
+      </div>
       <div
         style={{
           width: "40px",
@@ -137,7 +146,7 @@ function LoadingOverlay() {
           textTransform: "uppercase",
         }}
       >
-        Loading Environment…
+        Loading Environment{progress > 0 ? ` — ${Math.round(progress)}%` : "…"}
       </p>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
@@ -168,11 +177,25 @@ const TourViewer = forwardRef<
 ) {
   const controlsRef = useRef<React.ComponentRef<typeof OrbitControls> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   // Reset loading state whenever the panorama changes
   useEffect(() => {
     setIsLoading(true);
+    setProgress(0);
   }, [panoramaUrl]);
+
+  // Animate fake progress bar while loading (climbs to ~85%, waits for real load)
+  useEffect(() => {
+    if (!isLoading) { setProgress(100); return; }
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 85) { clearInterval(interval); return 85; }
+        return Math.min(prev + Math.random() * 5, 85);
+      });
+    }, 250);
+    return () => clearInterval(interval);
+  }, [isLoading, panoramaUrl]);
 
   const handleLoaded = useCallback(() => {
     setIsLoading(false);
@@ -200,14 +223,10 @@ const TourViewer = forwardRef<
 
   return (
     <div style={{ position: "absolute", inset: 0 }}>
-      {isLoading && <LoadingOverlay />}
+      {isLoading && <LoadingOverlay progress={progress} />}
       <Canvas
         camera={{ position: [0, 0, 0.1], fov: 75, near: 0.01, far: 1000 }}
-        gl={{
-          antialias: true,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.0,
-        }}
+        gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
         style={{ width: "100%", height: "100%" }}
       >
         <Suspense fallback={null}>

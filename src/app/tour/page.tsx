@@ -6,9 +6,10 @@ import UIOverlay from "@/components/tour/UIOverlay";
 import type { TourViewerHandle } from "@/components/tour/TourViewer";
 import tourScenes from "@/data/tourScenes";
 
-const TourViewer = dynamic(() => import("@/components/tour/TourViewer"), {
-  ssr: false,
-});
+const TourViewer = dynamic(
+  () => import(/* webpackPrefetch: true */ "@/components/tour/TourViewer"),
+  { ssr: false }
+);
 
 export default function TourPage() {
   const [currentSceneId, setCurrentSceneId] = useState<string>("lobby");
