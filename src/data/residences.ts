@@ -1,3 +1,5 @@
+import type { NavHotspot } from "@/data/tourScenes";
+
 export interface ResidenceHotspot {
   id: string;
   label: string;
@@ -19,6 +21,7 @@ export interface Residence {
   amenities: string[];
   specs: { key: string; value: string }[];
   hotspots: ResidenceHotspot[];
+  navHotspots: NavHotspot[];
 }
 
 const residences: Residence[] = [
@@ -109,6 +112,10 @@ const residences: Residence[] = [
         ],
       },
     ],
+    navHotspots: [
+      { id: "pavilion-prev", targetSceneId: "atelier", label: "The Atelier", position: [-9, -3, 0] },
+      { id: "pavilion-next", targetSceneId: "garden", label: "Garden Suite", position: [9, -3, 0] },
+    ],
   },
   {
     id: "garden",
@@ -136,6 +143,10 @@ const residences: Residence[] = [
       { key: "View", value: "Garden" },
     ],
     hotspots: [],
+    navHotspots: [
+      { id: "garden-prev", targetSceneId: "pavilion", label: "Beach Pavilion", position: [-9, -3, 0] },
+      { id: "garden-next", targetSceneId: "ocean", label: "Ocean House", position: [9, -3, 0] },
+    ],
   },
   {
     id: "ocean",
@@ -163,6 +174,10 @@ const residences: Residence[] = [
       { key: "View", value: "Panoramic Ocean" },
     ],
     hotspots: [],
+    navHotspots: [
+      { id: "ocean-prev", targetSceneId: "garden", label: "Garden Suite", position: [-9, -3, 0] },
+      { id: "ocean-next", targetSceneId: "atelier", label: "The Atelier", position: [9, -3, 0] },
+    ],
   },
   {
     id: "atelier",
@@ -190,6 +205,10 @@ const residences: Residence[] = [
       { key: "View", value: "Courtyard" },
     ],
     hotspots: [],
+    navHotspots: [
+      { id: "atelier-prev", targetSceneId: "ocean", label: "Ocean House", position: [-9, -3, 0] },
+      { id: "atelier-next", targetSceneId: "pavilion", label: "Beach Pavilion", position: [9, -3, 0] },
+    ],
   },
 ];
 

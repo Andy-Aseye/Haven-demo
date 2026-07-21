@@ -16,6 +16,8 @@ import defaultHotspots from "@/data/tourHotspots";
 import type { ResidenceHotspot } from "@/data/residences";
 import Link from "next/link";
 
+import type { TourScene } from "@/data/tourScenes";
+
 interface UIOverlayProps {
   activeHotspot: string | null;
   onCloseHotspot: () => void;
@@ -27,6 +29,9 @@ interface UIOverlayProps {
   onToggleFullscreen: () => void;
   hotspots?: ResidenceHotspot[];
   sceneName?: string;
+  scenes?: TourScene[];
+  currentSceneId?: string;
+  onNavigate?: (sceneId: string) => void;
 }
 
 export default function UIOverlay({
@@ -40,6 +45,9 @@ export default function UIOverlay({
   onToggleFullscreen,
   hotspots = defaultHotspots,
   sceneName = "Glasshouse Interior",
+  scenes = [],
+  currentSceneId,
+  onNavigate,
 }: UIOverlayProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const sidebarContentRef = useRef<HTMLDivElement>(null);
@@ -125,9 +133,95 @@ export default function UIOverlay({
             fontSize: "0.75rem", fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase",
           }}
         >
-          {hotspots.length} Points of Interest
+          {scenes.length > 0 ? `${scenes.length} Rooms` : `${hotspots.length} Points of Interest`}
         </div>
       </header>
+
+      {/* ─── Room Navigator Strip ────────────────────── */}
+      {scenes.length > 0 && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "5.5rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            padding: "0.4rem 0.75rem",
+            borderRadius: "2rem",
+            background: "rgba(0,0,0,0.35)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            pointerEvents: "auto",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {scenes.map((scene, idx) => {
+            const isActive = scene.id === currentSceneId;
+            return (
+              <div key={scene.id} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                {idx > 0 && (
+                  <div
+                    style={{
+                      width: "1px",
+                      height: "16px",
+                      background: "rgba(255,255,255,0.12)",
+                      flexShrink: 0,
+                    }}
+                  />
+                )}
+                <button
+                  onClick={() => !isActive && onNavigate?.(scene.id)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.35rem",
+                    padding: "0.3rem 0.75rem",
+                    borderRadius: "1.5rem",
+                    border: isActive ? "1px solid rgba(201,169,110,0.5)" : "1px solid transparent",
+                    background: isActive ? "rgba(201,169,110,0.15)" : "transparent",
+                    color: isActive ? "#C9A96E" : "rgba(255,255,255,0.55)",
+                    fontFamily: "var(--font-body, sans-serif)",
+                    fontSize: "0.72rem",
+                    fontWeight: isActive ? 600 : 500,
+                    letterSpacing: "0.05em",
+                    textTransform: "uppercase",
+                    cursor: isActive ? "default" : "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = "rgba(255,255,255,0.9)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = "rgba(255,255,255,0.55)";
+                      e.currentTarget.style.background = "transparent";
+                    }
+                  }}
+                >
+                  {isActive && (
+                    <span
+                      style={{
+                        width: "5px",
+                        height: "5px",
+                        borderRadius: "50%",
+                        background: "#C9A96E",
+                        flexShrink: 0,
+                      }}
+                    />
+                  )}
+                  {scene.label}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* ─── Control Bar ─────────────────────────────── */}
       <div
